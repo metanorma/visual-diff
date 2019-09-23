@@ -7,9 +7,10 @@ and compare resulting PNG images for differences.
 Setup
 -----
 
-* `chromedriver` binary in $PATH
-* Corresponding Chrome version
-* Python 2 environment with libraries::
+* ``git clone <this-repo> visual-diff && cd visual-diff``
+* Obtain ``chromedriver`` binary and make sure it’s in your $PATH
+* Install corresponding Chrome version
+* Create Python 2 environment with libraries needed::
 
       virtualenv diff-env
       source diff-env/bin/activate 
@@ -18,11 +19,11 @@ Setup
 Usage
 -----
 
-::
+With Python environment activated, run::
 
-    python html_diff.py <path/to/old/file> <path/to/new/file> <out_dir>
+    python html_diff.py <path/to/old/html/file> <path/to/new/html/file> <out_dir>
 
-...then open ``<OUT_DIR>/<html_document_filenamename>.html``
+...then open ``<out_dir>/<html_document_filenamename>.html``
 to see the visual diff.
 
-Switch between old, new and diff layers, and adjust opacity.
+Switch between old, new and diff layers, and adjust opacity as needed.
