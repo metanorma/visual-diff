@@ -1,8 +1,18 @@
-Visual differ for Metanorma flavor HTML deliverables
-====================================================
+Visual HTML differ
+==================
 
 The tool will use headless Chrome to screenshot given pages
 and compare resulting PNG images for differences.
+
+Why
+---
+
+Many Metanorma flavors offer deliverables formatted in compliance
+with corresponding organizations’ requirements.
+
+During development (especially larger refactors),
+a visual diff helps avoid undesired accidental changes in styling
+that might break compliance.
 
 Setup
 -----
