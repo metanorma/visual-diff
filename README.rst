@@ -1,8 +1,8 @@
 Visual HTML differ
 ==================
 
-The tool will use headless Chrome to screenshot given pages
-and compare resulting PNG images for differences.
+Uses headless Chrome to screenshot given pages
+and generates an HTML GUI for visual comparison.
 
 Setup
 -----
