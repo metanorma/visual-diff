@@ -7,10 +7,12 @@ and compare resulting PNG images for differences.
 Setup
 -----
 
-* Obtain the ``chromedriver`` [1]_ binary and make sure it’s in your $PATH
+* Obtain the ``chromedriver`` [1]_ binary and make sure it’s in your $PATH.
 
-* Install matching Chrome version
-  (otherwise, the tool will fail with a ``chromedriver`` error telling you which version you need)
+* Install matching Chrome version.
+
+  (If not sure, let the tool run and it’ll fail with a ``chromedriver`` error
+  instructing you which version you need.)
 
 * Obtain this tool::
 
