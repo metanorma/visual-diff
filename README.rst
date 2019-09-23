@@ -20,7 +20,7 @@ Usage
 
     python html_diff.py <path/to/old/file> <path/to/new/file> <out_dir>
 
-...then open `<OUT_DIR>/<html_document_filenamename>.html`
+...then open ``<OUT_DIR>/<html_document_filenamename>.html``
 to see the visual diff.
 
 Switch between old, new and diff layers, and adjust opacity.
