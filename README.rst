@@ -16,7 +16,7 @@ Setup
 
 * Obtain this tool::
 
-      git clone <this-repo> visual-diff
+      git clone git@github.com:metanorma/visual-diff.git visual-diff
       cd visual-diff
 
 * Create a Python 2 environment with libraries needed::
