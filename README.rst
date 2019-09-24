@@ -23,7 +23,7 @@ Setup
 
       virtualenv diff-env
       source diff-env/bin/activate 
-      pip install requirements.txt
+      pip install -r requirements.txt
 
 .. [1] https://chromedriver.chromium.org
 
