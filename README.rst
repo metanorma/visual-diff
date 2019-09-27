@@ -54,7 +54,7 @@ that might break compliance.
 Roadmap
 -------
 
-* Simplify testing responsive layouts ([1]_)
+* Simplify testing responsive layouts [1]_
 * Simplify running on CI pipelines for Metanorma flavor repos
 
 .. [1] https://github.com/metanorma/visual-diff/issues/1
