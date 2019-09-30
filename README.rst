@@ -7,7 +7,7 @@ and generates an HTML GUI for visual comparison.
 Setup
 -----
 
-* Obtain the ``chromedriver`` binary [1]_ and make sure it’s in your $PATH.
+* Obtain the ``chromedriver`` binary [#]_ and make sure it’s in your $PATH.
 
 * Install matching Chrome version.
 
@@ -19,14 +19,14 @@ Setup
       git clone git@github.com:metanorma/visual-diff.git visual-diff
       cd visual-diff
 
-* Create a Python 2 virtual environment [2]_ with libraries needed::
+* Create a Python 2 virtual environment [#]_ with libraries needed::
 
       virtualenv diff-env
       source diff-env/bin/activate 
       pip install -r requirements.txt
 
-.. [1] https://chromedriver.chromium.org
-.. [2] https://virtualenv.pypa.io/en/latest/
+.. [#] https://chromedriver.chromium.org
+.. [#] https://virtualenv.pypa.io/en/latest/
 
 Usage
 -----
@@ -55,7 +55,7 @@ that might break compliance.
 Roadmap
 -------
 
-* Simplify testing responsive layouts [1]_
+* Simplify testing responsive layouts [#]_
 * Simplify running on CI pipelines for Metanorma flavor repos
 
-.. [1] https://github.com/metanorma/visual-diff/issues/1
+.. [#] https://github.com/metanorma/visual-diff/issues/1
