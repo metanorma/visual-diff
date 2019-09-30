@@ -19,13 +19,14 @@ Setup
       git clone git@github.com:metanorma/visual-diff.git visual-diff
       cd visual-diff
 
-* Create a Python 2 environment with libraries needed::
+* Create a Python 2 virtual environment [2]_ with libraries needed::
 
       virtualenv diff-env
       source diff-env/bin/activate 
       pip install -r requirements.txt
 
 .. [1] https://chromedriver.chromium.org
+.. [2] https://virtualenv.pypa.io/en/latest/
 
 Usage
 -----
