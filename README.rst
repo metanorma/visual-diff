@@ -32,7 +32,7 @@ Usage
 
 1. With Python environment activated, run::
 
-       python html_diff.py <path/to/old/html/document> <path/to/new/html/document> <out_dir>
+       python html_diff.py <path/to/old/document.html> <path/to/new/document.html> <path/to/diff/results/dir>
 
 2. Open ``<out_dir>/<html_document_filename>.html``
    in your favorite browser to see a visual diff.
