@@ -7,7 +7,7 @@ and generates an HTML GUI for visual comparison.
 Setup
 -----
 
-* Obtain the ``chromedriver`` [1]_ binary and make sure it’s in your $PATH.
+* Obtain the ``chromedriver`` binary [1]_ and make sure it’s in your $PATH.
 
 * Install matching Chrome version.
 
