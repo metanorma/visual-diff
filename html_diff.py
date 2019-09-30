@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-
 import os
 import re
 import sys
@@ -11,6 +10,9 @@ from shutil import rmtree
 from selenium import webdriver
 
 
+# imagemagik binary
+imagemagick = 'compare'
+
 # Optionally remove intermediate work results as PNG slices
 remove_slices = False
 
@@ -19,13 +21,17 @@ make_visual_diff = True
 options = webdriver.ChromeOptions()
 options.headless = True
 
-#browser = webdriver.Firefox(options=options)
+# browser = webdriver.Firefox(options=options)
 browser = webdriver.Chrome(options=options)
 
-browser.set_window_size(1280, 960)
-#browser.fullscreen_window()
+window_width = 1280
+window_height = 960
 
-image_magick = 'compare'
+# default background color (RGBA):
+background_color = (255, 255, 255, 0)
+
+browser.set_window_size(window_width, window_height)
+# browser.fullscreen_window()
 
 html_file = """
 <!doctype html>
@@ -178,7 +184,8 @@ html_file = """
 def fullpage_screenshot(filename):
     # use in headless mode:
     sz = lambda x: browser.execute_script('return document.body.parentNode.scroll' + x)
-    browser.set_window_size(sz('Width'), sz('Height')) # May need manual adjustment
+    # may need manual adjustment:
+    browser.set_window_size(sz('Width'), sz('Height'))
     browser.find_element_by_tag_name('body').screenshot(filename)
 
 
@@ -208,55 +215,83 @@ def cut_to_slices(image_path, out_name, out_dir, slice_size):
         upper += slice_size
         slice_name = '%s_%s.png' % (out_name, str(count).zfill(2))
         working_slice.save(os.path.join(out_dir, slice_name))
-        count +=1
+        count += 1
 
 
-def make_diff(dir_path):
+def equalize_heights(output_dir):
+    old_file = '%s/old-full.png' % output_dir
+    new_file = '%s/new-full.png' % output_dir
+    diff_file = '%s/diff-full.png' % output_dir
+
+    new_image = Image.open(new_file).convert('RGBA')
+    old_image = Image.open(old_file).convert('RGBA')
+
+    if (old_image.height > new_image.height):
+        temp_image = Image.new('RGBA', (old_image.width, old_image.height), color=background_color)
+        temp_image.paste(new_image, (0, 0))
+        temp_image.save(new_file, 'PNG')
+        max_height = temp_image.height
+
+    elif (old_image.height < new_image.height):
+        temp_image = Image.new('RGBA', (new_image.width, new_image.height), color=background_color)
+        temp_image.paste(old_image, (0, 0))
+        temp_image.save(old_file, 'PNG')
+        max_height = temp_image.height
+
+    else:
+        max_height = new_image.height
+
+    return max_height
+
+
+def make_diff(output_dir):
     slice_height = 1024
-    slice_dir = '%s/slices' % dir_path
+    slice_dir = '%s/slices' % output_dir
 
     make_dir(slice_dir)
 
-    cut_to_slices('%s/old-full.png' % dir_path, 'old', slice_dir,  slice_height)
-    cut_to_slices('%s/new-full.png' % dir_path, 'new', slice_dir,  slice_height)
+    max_height = equalize_heights(output_dir)
 
-    old_slices = glob('%s/slices/old_*.png' % dir_path)
-    new_slices = glob('%s/slices/new_*.png' % dir_path)
+    cut_to_slices('%s/old-full.png' % output_dir, 'old', slice_dir,  slice_height)
+    cut_to_slices('%s/new-full.png' % output_dir, 'new', slice_dir,  slice_height)
+
+    old_slices = glob('%s/slices/old_*.png' % output_dir)
+    new_slices = glob('%s/slices/new_*.png' % output_dir)
 
     i = 0
     for _elm in new_slices:
         i += 1
 
-        old_slice = '%s/slices/old_%s.png' % (dir_path, str(i).zfill(2))
-        new_slice = '%s/slices/new_%s.png' % (dir_path, str(i).zfill(2))
-        diff_slice = '%s/slices/diff_%s.png' % (dir_path, str(i).zfill(2))
+        old_slice = '%s/slices/old_%s.png' % (output_dir, str(i).zfill(2))
+        new_slice = '%s/slices/new_%s.png' % (output_dir, str(i).zfill(2))
+        diff_slice = '%s/slices/diff_%s.png' % (output_dir, str(i).zfill(2))
 
         if old_slice in old_slices and new_slice in new_slices:
-            os.system('%s -dissimilarity-threshold 1 -compose difference %s %s %s' % (image_magick, new_slice, old_slice, diff_slice))
+            os.system('%s -dissimilarity-threshold 1 -compose difference %s %s %s' % (imagemagick, new_slice, old_slice, diff_slice))
 
-    diff_slices = glob('%s/slices/diff_*.png' % dir_path)
-    first_slice = Image.open('%s/slices/diff_01.png' %dir_path)
-    diff_image = Image.new('RGB', (first_slice.width, slice_height * len(diff_slices) ))
+    diff_slices = glob('%s/slices/diff_*.png' % output_dir)
+    first_slice = Image.open('%s/slices/diff_01.png' % output_dir)
+    diff_image = Image.new('RGB', (first_slice.width, max_height))
 
     i = 0
     cur_hgt = 0
 
     for _elm in diff_slices:
         i += 1
-        diff_slice = Image.open('%s/slices/diff_%s.png' % (dir_path, str(i).zfill(2)))
+        diff_slice = Image.open('%s/slices/diff_%s.png' % (output_dir, str(i).zfill(2)))
         diff_image.paste(diff_slice, (0, cur_hgt))
-        cur_hgt += slice_height
+        cur_hgt += diff_slice.height
 
-    diff_image.save('%s/diff-full.png' % dir_path)
+    diff_image.save('%s/diff-full.png' % output_dir)
 
     if remove_slices:
-        rmtree('%s/slices/' % dir_path)
+        rmtree('%s/slices/' % output_dir)
 
 
-def compare_html(old_file, new_file):
+def compare_html(old_file, new_file, output_dir):
     _name = os.path.splitext(os.path.basename(old_file))[0]
 
-    out_base_dir = '%s/output' % work_dir
+    out_base_dir = '%s/output' % output_dir
     make_dir(out_base_dir)
 
     out_dir = '%s/%s' % (out_base_dir, _name)
@@ -281,8 +316,13 @@ def compare_html(old_file, new_file):
         make_diff(out_dir)
 
 
-old_file = sys.argv[1]
-new_file = sys.argv[2]
-work_dir = sys.argv[3]
+def main():
+    old_file = sys.argv[1]
+    new_file = sys.argv[2]
+    output_dir = sys.argv[3]
 
-compare_html(old_file, new_file)
+    compare_html(old_file, new_file, output_dir)
+
+
+if __name__ == '__main__':
+    main()
