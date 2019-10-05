@@ -35,7 +35,7 @@ Usage
 
        python html_diff.py <path/to/old/document.html> <path/to/new/document.html> <path/to/diff/results/dir>
 
-2. Open ``<path/to/diff/results/dir>/<document-name>.html``
+2. Open ``<path/to/diff/results/dir>/<document>/index.html``
    in your favorite browser to see a visual diff.
 
 3. Switch between old, new and diff layers, and adjust opacity as needed.
